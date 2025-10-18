@@ -39,10 +39,14 @@ dependencies {
 		// Excluir logging que será proporcionado por la aplicación principal
 		exclude group: 'ch.qos.logback', module: 'logback-classic'
 		exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
 	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 	implementation 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	// Agregar SLF4J explícitamente ya que excluimos spring-boot-starter-logging
+	implementation 'org.slf4j:slf4j-api:1.7.36'
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
