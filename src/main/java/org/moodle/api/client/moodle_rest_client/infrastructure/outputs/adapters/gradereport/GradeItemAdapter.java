@@ -19,14 +19,14 @@ public class GradeItemAdapter implements GradeItemPort {
     private final MoodleHttpClient moodleHttpClient;
     private final GradeItemsResponseMapper responseMapper;
 
-    private static final String WS_FUNCTION = "gradereport_user_get_grade_items";
+    private static final String GRADEREPORT_USER_GET_GRADE_ITEMS = "gradereport_user_get_grade_items";
 
     @Override
     public GradeItems getUserGradeItems(Long courseId) {
         Map<String, Object> params = new HashMap<>();
         params.put("courseid", courseId.toString());
 
-        UserGradesResponseDTO responseDto = moodleHttpClient.call(WS_FUNCTION, params, UserGradesResponseDTO.class);
+        UserGradesResponseDTO responseDto = moodleHttpClient.call(GRADEREPORT_USER_GET_GRADE_ITEMS, params, UserGradesResponseDTO.class);
 
         if (responseDto == null) {
             return GradeItems.builder()
