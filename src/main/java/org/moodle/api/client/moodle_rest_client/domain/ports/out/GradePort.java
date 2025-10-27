@@ -1,0 +1,8 @@
+package org.moodle.api.client.moodle_rest_client.domain.ports.out;
+
+import org.moodle.api.client.moodle_rest_client.domain.requests.mod.assign.GetGradesRequest;
+import org.moodle.api.client.moodle_rest_client.domain.responses.mod.assign.Grades;
+
+public interface GradePort {
+    Grades getGrades(GetGradesRequest dto);
+}
