@@ -34,5 +34,5 @@ public class CourseDTO {
     private String lang;
     private String forcetheme;
     private List<CourseFormatOptionDTO> courseformatoptions;
-    private List<CustomFieldRequestDTO> customfields;
+    private List<CustomFieldDTO> customfields;
 }

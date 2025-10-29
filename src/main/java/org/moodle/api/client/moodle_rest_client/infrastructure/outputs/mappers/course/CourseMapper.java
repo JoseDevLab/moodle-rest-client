@@ -20,6 +20,8 @@ public interface CourseMapper {
     }
     default Integer map(Boolean value){ return value == null ? null : value ? 1 : 0;}
     default Boolean map(Integer value){ return value == null ? null : value == 1;}
+    CustomField toDomain(CustomField dto);
+    List<CustomField> toCustomFieldsDomain(List<CustomFieldDTO> dtos);
     Course toDomain(CourseDTO dto);
     List<Course> toDomain(List<CourseDTO> dtos);
     CourseFormatOption toDomain(CourseFormatOptionDTO dto);
