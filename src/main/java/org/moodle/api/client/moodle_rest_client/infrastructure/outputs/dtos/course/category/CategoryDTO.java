@@ -10,14 +10,14 @@ public class CategoryDTO {
     private String name;
     private String idnumber;
     private String description;
-    private int descriptionformat;
+    private Integer descriptionformat;
     private Long parent;
-    private int sortorder;
-    private int coursecount;
+    private Integer sortorder;
+    private Integer coursecount;
     private Integer visible;
     private Integer visibleold;
     private Long timemodified;
-    private int depth;
+    private Integer depth;
     private String path;
     private String theme;
 }

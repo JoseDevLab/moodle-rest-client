@@ -6,6 +6,7 @@ import org.moodle.api.client.moodle_rest_client.domain.requests.course.category.
 import org.moodle.api.client.moodle_rest_client.domain.requests.course.category.DeleteCategoryRequest;
 import org.moodle.api.client.moodle_rest_client.domain.requests.course.category.SearchCategoryRequest;
 import org.moodle.api.client.moodle_rest_client.domain.requests.course.category.UpdateCategoryRequest;
+import org.moodle.api.client.moodle_rest_client.domain.responses.course.category.RecursiveCategory;
 
 import java.util.List;
 

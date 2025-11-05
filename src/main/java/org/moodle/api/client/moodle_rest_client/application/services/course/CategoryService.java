@@ -9,16 +9,22 @@ import org.moodle.api.client.moodle_rest_client.domain.ports.out.course.Category
 import org.moodle.api.client.moodle_rest_client.domain.requests.course.category.*;
 import org.moodle.api.client.moodle_rest_client.domain.responses.course.category.BulkCategoryCreation;
 import org.moodle.api.client.moodle_rest_client.domain.responses.course.category.FailedCategoryCreation;
+import org.moodle.api.client.moodle_rest_client.domain.responses.course.category.RecursiveCategory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CategoryService implements GetCourseCategoriesUseCase, CreateCategoriesUseCase, UpdateCategoriesUseCase, DeleteCategoriesUseCase, SearchCategoriesUseCase, BulkCreateCategoriesUseCase {
+public class CategoryService implements GetCourseCategoriesUseCase, CreateCategoriesUseCase, UpdateCategoriesUseCase,
+        DeleteCategoriesUseCase, SearchCategoriesUseCase, BulkCreateCategoriesUseCase, GetRecursiveCategoriesUseCase {
 
     private final CategoryPort categoryPort;
 
@@ -43,8 +49,8 @@ public class CategoryService implements GetCourseCategoriesUseCase, CreateCatego
     }
 
     @Override
-    public List<Category> searchCategories(SearchCategoryRequest criteria) {
-        return categoryPort.searchCategories(criteria);
+    public List<Category> searchCategories(SearchCategoryRequest request) {
+        return categoryPort.searchCategories(request);
     }
 
     @Override
@@ -110,5 +116,47 @@ public class CategoryService implements GetCourseCategoriesUseCase, CreateCatego
                 processLevel(request.getChildren(), newParentId, response);
             }
         }
+    }
+
+    @Override
+    public List<RecursiveCategory> getRecursiveCategories(SearchCategoryRequest request) throws MoodleApiException {
+        List<Category> categories = categoryPort.searchCategories(request);
+
+        // Crear un mapa para acceso rápido por ID
+        Map<Long, RecursiveCategory> categoryMap = categories.stream()
+                .collect(Collectors.toMap(Category::getId, category -> RecursiveCategory.builder()
+                        .id(category.getId())
+                        .name(category.getName())
+                        .idnumber(category.getIdnumber())
+                        .description(category.getDescription())
+                        .descriptionformat(category.getDescriptionformat())
+                        .parent(category.getParent())
+                        .sortorder(category.getSortorder())
+                        .coursecount(category.getCoursecount())
+                        .visible(category.getVisible())
+                        .visibleold(category.getVisibleold())
+                        .timemodified(category.getTimemodified())
+                        .depth(category.getDepth())
+                        .path(category.getPath())
+                        .theme(category.getTheme())
+                        .children(new ArrayList<>())
+                        .build()));
+
+        // Construir la jerarquía recursiva
+        List<RecursiveCategory> rootCategories = new ArrayList<>();
+        for (RecursiveCategory category : categoryMap.values()) {
+            if (Objects.equals(category.getParent(), 0L)) {
+                // Es una categoría raíz
+                rootCategories.add(category);
+            } else {
+                // Agregar como hijo de su padre
+                RecursiveCategory parent = categoryMap.get(category.getParent());
+                if (parent != null) {
+                    parent.getChildren().add(category);
+                }
+            }
+        }
+
+        return rootCategories;
     }
 }
