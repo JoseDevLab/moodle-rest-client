@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CourseService implements CreateCoursesUseCase, SearchCoursesByFieldUseCase, UpdateCoursesUseCase, DeleteCoursesUseCase, GetCourseContentsUseCase, GetCourseModuleUseCase, SearchCoursesUseCase, GetCoursesByIdUseCase, DuplicateCourseUseCase, ImportCourseUseCase {
+public class CourseService implements CreateCoursesUseCase, GetCoursesByFieldUseCase, UpdateCoursesUseCase, DeleteCoursesUseCase, GetCourseContentsUseCase, GetCourseModuleUseCase, SearchCoursesUseCase, GetCoursesByIdUseCase, DuplicateCourseUseCase, ImportCourseUseCase {
 
     private final CoursePort coursePort;
 
@@ -27,7 +27,7 @@ public class CourseService implements CreateCoursesUseCase, SearchCoursesByField
     }
 
     @Override
-    public List<Course> searchCoursesByField(String field, String value) {
+    public List<Course> getCoursesByField(String field, String value) {
         return coursePort.searchCoursesByField(field, value);
     }
 
