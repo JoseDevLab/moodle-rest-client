@@ -6,14 +6,16 @@ import org.moodle.api.client.moodle_rest_client.domain.models.UserCustomField;
 import org.moodle.api.client.moodle_rest_client.domain.models.UserPreference;
 import org.moodle.api.client.moodle_rest_client.domain.requests.user.CreateUserRequest;
 import org.moodle.api.client.moodle_rest_client.domain.requests.user.SearchUserCriterion;
+import org.moodle.api.client.moodle_rest_client.domain.requests.user.UpdateUserRequest;
 import org.moodle.api.client.moodle_rest_client.domain.responses.user.CreateUserResponse;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.user.*;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.mappers.TypeValueMapper;
 
 import java.util.List;
 
-@Mapper
+@Mapper(uses = TypeValueMapper.class)
 public interface UserMapper {
-    // Mapeo para get users
+    // get users
     User toDomain(UserDTO dto);
     List<User> toDomain(List<UserDTO> dtos);
 
@@ -23,7 +25,7 @@ public interface UserMapper {
     SearchUserCriterionDTO toRequestDTO(SearchUserCriterion criterion);
     List<SearchUserCriterionDTO> toRequestDTO(List<SearchUserCriterion> criteria);
 
-    // Mapeo para create users
+    // create users
     CreateUserRequestDTO toRequestDTO(CreateUserRequest request);
     List<CreateUserRequestDTO> toCreateRequestDTO(List<CreateUserRequest> requests);
 
@@ -32,4 +34,8 @@ public interface UserMapper {
 
     CreateUserResponse toDomain(CreateUserResponseDTO dto);
     List<CreateUserResponse> toCreateResponseDomain(List<CreateUserResponseDTO> dtos);
+
+    // Update users
+    UpdateUserRequestDTO toRequestDTO(UpdateUserRequest request);
+    List<UpdateUserRequestDTO> toUpdateRequestDTO(List<UpdateUserRequest> requests);
 }
