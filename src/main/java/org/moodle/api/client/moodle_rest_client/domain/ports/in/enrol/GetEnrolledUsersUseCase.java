@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface GetEnrolledUsersUseCase {
     List<EnrolledUser> getEnrolledUsers(Integer courseid, List<GetEnrolledUsersOption> options) throws MoodleApiException;
-    List<EnrolledUser> getEnrolledUsers(Integer sourseid) throws MoodleApiException;
+    List<EnrolledUser> getEnrolledUsers(Integer courseid) throws MoodleApiException;
 }
