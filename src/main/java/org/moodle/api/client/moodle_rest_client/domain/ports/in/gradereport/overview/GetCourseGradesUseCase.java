@@ -4,5 +4,5 @@ import org.moodle.api.client.moodle_rest_client.domain.exceptions.MoodleApiExcep
 import org.moodle.api.client.moodle_rest_client.domain.responses.gradereport.overview.CourseGrades;
 
 public interface GetCourseGradesUseCase {
-    CourseGrades getCourseGrades(Integer userId) throws MoodleApiException;
+    CourseGrades getCourseGrades(Long userId) throws MoodleApiException;
 }

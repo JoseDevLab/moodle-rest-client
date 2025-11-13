@@ -13,7 +13,7 @@ public class CourseGradeService implements GetCourseGradesUseCase {
     private final CourseGradePort courseGradePort;
 
     @Override
-    public CourseGrades getCourseGrades(Integer userId) {
+    public CourseGrades getCourseGrades(Long userId) {
         return courseGradePort.getCourseGrades(userId);
     }
 }

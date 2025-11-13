@@ -8,7 +8,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CourseGradeDTO {
     @JsonProperty("courseid")
-    private Integer courseId;
+    private Long courseId;
     @JsonProperty("grade")
     private String grade;
     @JsonProperty("rawgrade")

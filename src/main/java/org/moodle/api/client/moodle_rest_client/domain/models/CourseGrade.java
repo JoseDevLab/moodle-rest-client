@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class CourseGrade {
-    private Integer courseId;
+    private Long courseId;
     private String grade;
     private String rawGrade;
     private Integer rank;

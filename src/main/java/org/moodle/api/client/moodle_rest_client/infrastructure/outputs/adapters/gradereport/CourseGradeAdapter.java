@@ -21,7 +21,7 @@ public class CourseGradeAdapter implements CourseGradePort {
     private static final String GRADEREPORT_OVERVIEW_GET_COURSE_GRADES = "gradereport_overview_get_course_grades";
 
     @Override
-    public CourseGrades getCourseGrades(Integer userId) {
+    public CourseGrades getCourseGrades(Long userId) {
         Map<String, Object> params = new HashMap<>();
         params.put("userid", userId.toString());
 
