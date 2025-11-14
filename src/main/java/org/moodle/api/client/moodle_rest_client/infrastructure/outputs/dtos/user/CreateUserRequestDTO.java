@@ -3,6 +3,7 @@ package org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.use
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.TypeValueRequestDTO;
 
 import java.util.List;
 
@@ -37,6 +38,14 @@ public class CreateUserRequestDTO {
     private String calendartype;
     private String theme;
     private Integer mailformat;
-    private List<UserCustomFieldDTO> customfields;
-    private List<UserPreferenceDTO> preferences;
+    /**
+     * Type: The name of the custom field
+     * Value: The value of the custom field
+     */
+    private List<TypeValueRequestDTO> customfields;
+    /**
+     * Type: The name of the preference
+     * Value: The value of the preference
+     */
+    private List<TypeValueRequestDTO> preferences;
 }

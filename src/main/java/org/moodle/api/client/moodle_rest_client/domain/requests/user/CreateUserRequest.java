@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.moodle.api.client.moodle_rest_client.domain.models.UserCustomField;
 import org.moodle.api.client.moodle_rest_client.domain.models.UserPreference;
+import org.moodle.api.client.moodle_rest_client.domain.requests.TypeValueRequest;
 
 import java.util.List;
 
@@ -37,6 +38,14 @@ public class CreateUserRequest {
     private String calendartype;
     private String theme;
     private Integer mailformat;
-    private List<UserCustomField> customfields;
-    private List<UserPreference> preferences;
+    /**
+     * Type: The name of the custom field
+     * Value: The value of the custom field
+     */
+    private List<TypeValueRequest> customfields;
+    /**
+     * Type: The name of the preference
+     * Value: The value of the preference
+     */
+    private List<TypeValueRequest> preferences;
 }
