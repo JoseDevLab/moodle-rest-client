@@ -38,7 +38,7 @@ public class SiteInfoDTO {
     @JsonProperty("advancedfeatures")
     private List<AdvancedFeatureDTO> advancedFeatures;
     @JsonProperty("usercanmanageownfiles")
-    private Integer userCanManageOwnFiles;
+    private Boolean userCanManageOwnFiles;
     @JsonProperty("userquota")
     private Integer userQuota;
     @JsonProperty("usermaxuploadfilesize")
@@ -56,7 +56,7 @@ public class SiteInfoDTO {
     @JsonProperty("usercalendartype")
     private String userCalendarType;
     @JsonProperty("userissiteadmin")
-    private Integer userIsSiteAdmin;
+    private Boolean userIsSiteAdmin;
     private String theme;
     @JsonProperty("limitconcurrentlogins")
     private Integer limitConcurrentLogins;

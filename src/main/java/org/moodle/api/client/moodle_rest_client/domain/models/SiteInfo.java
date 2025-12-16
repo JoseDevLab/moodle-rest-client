@@ -28,7 +28,7 @@ public class SiteInfo {
     private String version;
     private String mobileCssUrl;
     private List<AdvancedFeature> advancedFeatures;
-    private Integer userCanManageOwnFiles;
+    private Boolean userCanManageOwnFiles;
     private Integer userQuota;
     private Integer userMaxUploadFileSize;
     private Integer userHomePage;
@@ -37,7 +37,7 @@ public class SiteInfo {
     private Long siteId;
     private String siteCalendarType;
     private String userCalendarType;
-    private Integer userIsSiteAdmin;
+    private Boolean userIsSiteAdmin;
     private String theme;
     private Integer limitConcurrentLogins;
     private Integer userSessionsCount;
