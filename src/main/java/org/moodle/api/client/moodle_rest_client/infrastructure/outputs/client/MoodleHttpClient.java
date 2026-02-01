@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.moodle.api.client.moodle_rest_client.domain.exceptions.MoodleApiException;
-import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.config.MoodleApiConfig;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.MoodleCredentialsDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,17 +23,16 @@ import java.util.Map;
 public class MoodleHttpClient {
 
     private final RestTemplate restTemplate;
-    private final MoodleApiConfig moodleApiConfig;
     private final ObjectMapper objectMapper;
 
-    public MoodleHttpClient(RestTemplate restTemplate, MoodleApiConfig moodleApiConfig, ObjectMapper objectMapper) {
+    public MoodleHttpClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
-        this.moodleApiConfig = moodleApiConfig;
         this.objectMapper = objectMapper;
     }
 
-    public <T> T call(String wsFunction, Map<String, Object> body, Class<T> responseType) {
-        String url = moodleApiConfig.getApiUrl();
+    public <T> T call(MoodleCredentialsDTO moodleCredentials, String wsFunction, Map<String, Object> body, Class<T> responseType) {
+        String url = moodleCredentials.getUrl();
+        String token = moodleCredentials.getWstoken();
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             url = "http://" + url;
         }
@@ -49,7 +48,7 @@ public class MoodleHttpClient {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("wstoken", moodleApiConfig.getApiToken());
+        requestBody.add("wstoken", token);
         requestBody.add("wsfunction", wsFunction);
         requestBody.add("moodlewsrestformat", "json");
 

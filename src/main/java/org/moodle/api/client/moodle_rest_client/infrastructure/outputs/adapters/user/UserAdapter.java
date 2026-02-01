@@ -2,6 +2,7 @@ package org.moodle.api.client.moodle_rest_client.infrastructure.outputs.adapters
 
 import lombok.RequiredArgsConstructor;
 import org.moodle.api.client.moodle_rest_client.domain.exceptions.MoodleApiException;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 import org.moodle.api.client.moodle_rest_client.domain.models.Warning;
 import org.moodle.api.client.moodle_rest_client.domain.ports.out.user.UserPort;
 import org.moodle.api.client.moodle_rest_client.domain.requests.user.CreateUserRequest;
@@ -11,6 +12,7 @@ import org.moodle.api.client.moodle_rest_client.domain.responses.user.CreateUser
 import org.moodle.api.client.moodle_rest_client.domain.responses.user.UserSearchResponse;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.client.MoodleHttpClient;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.user.*;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.mappers.MoodleCredentialsMapper;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.mappers.WarningMapper;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.mappers.user.UserMapper;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.mappers.user.UserSearchResponseMapper;
@@ -26,13 +28,14 @@ public class UserAdapter implements UserPort {
     private final UserMapper userMapper;
     private final WarningMapper warningMapper;
     private final UserSearchResponseMapper responseMapper;
+    private final MoodleCredentialsMapper moodleCredentialsMapper;
 
     private static final String GET_USERS_FUNCTION = "core_user_get_users";
     private static final String CREATE_USERS_FUNCTION = "core_user_create_users";
     private static final String UPDATE_USERS_FUNCTION = "core_user_update_users";
 
     @Override
-    public UserSearchResponse getUsers(List<SearchUserCriterion> criteria) {
+    public UserSearchResponse getUsers(MoodleCredentials moodleCredentials, List<SearchUserCriterion> criteria) {
         Map<String, Object> requestBody = new HashMap<>();
 
         if (criteria != null && !criteria.isEmpty()) {
@@ -41,9 +44,10 @@ public class UserAdapter implements UserPort {
         }
 
         UserSearchResponseDTO responseDto = moodleHttpClient.call(
-            GET_USERS_FUNCTION, 
-            requestBody, 
-            UserSearchResponseDTO.class
+                moodleCredentialsMapper.toDTO(moodleCredentials),
+                GET_USERS_FUNCTION,
+                requestBody,
+                UserSearchResponseDTO.class
         );
 
         if (responseDto == null) {
@@ -57,16 +61,17 @@ public class UserAdapter implements UserPort {
     }
 
     @Override
-    public List<CreateUserResponse> createUsers(List<CreateUserRequest> usersToCreate) {
+    public List<CreateUserResponse> createUsers(MoodleCredentials moodleCredentials, List<CreateUserRequest> usersToCreate) {
         List<CreateUserRequestDTO> dtoList = userMapper.toCreateRequestDTO(usersToCreate);
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("users", dtoList);
 
         CreateUserResponseDTO[] responseArray = moodleHttpClient.call(
-            CREATE_USERS_FUNCTION, 
-            requestBody, 
-            CreateUserResponseDTO[].class
+                moodleCredentialsMapper.toDTO(moodleCredentials),
+                CREATE_USERS_FUNCTION,
+                requestBody,
+                CreateUserResponseDTO[].class
         );
 
         if (responseArray == null) {
@@ -77,13 +82,14 @@ public class UserAdapter implements UserPort {
     }
 
     @Override
-    public List<Warning> updateUsers(List<UpdateUserRequest> usersToUpdate) throws MoodleApiException {
+    public List<Warning> updateUsers(MoodleCredentials moodleCredentials, List<UpdateUserRequest> usersToUpdate) throws MoodleApiException {
         List<UpdateUserRequestDTO> dtoList = userMapper.toUpdateRequestDTO(usersToUpdate);
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("users", dtoList);
 
         UpdateUsersResponseDTO responseDto = moodleHttpClient.call(
+                moodleCredentialsMapper.toDTO(moodleCredentials),
                 UPDATE_USERS_FUNCTION,
                 requestBody,
                 UpdateUsersResponseDTO.class

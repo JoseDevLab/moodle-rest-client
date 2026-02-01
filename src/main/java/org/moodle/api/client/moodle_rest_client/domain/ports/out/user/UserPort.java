@@ -7,11 +7,12 @@ import org.moodle.api.client.moodle_rest_client.domain.requests.user.SearchUserC
 import org.moodle.api.client.moodle_rest_client.domain.requests.user.UpdateUserRequest;
 import org.moodle.api.client.moodle_rest_client.domain.responses.user.CreateUserResponse;
 import org.moodle.api.client.moodle_rest_client.domain.responses.user.UserSearchResponse;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 
 import java.util.List;
 
 public interface UserPort {
-    UserSearchResponse getUsers(List<SearchUserCriterion> criteria) throws MoodleApiException;
-    List<CreateUserResponse> createUsers(List<CreateUserRequest> usersToCreate) throws MoodleApiException;
-    List<Warning> updateUsers(List<UpdateUserRequest> usersToUpdate) throws MoodleApiException;
+    UserSearchResponse getUsers(MoodleCredentials moodleCredentials, List<SearchUserCriterion> criteria) throws MoodleApiException;
+    List<CreateUserResponse> createUsers(MoodleCredentials moodleCredentials, List<CreateUserRequest> usersToCreate) throws MoodleApiException;
+    List<Warning> updateUsers(MoodleCredentials moodleCredentials, List<UpdateUserRequest> usersToUpdate) throws MoodleApiException;
 }

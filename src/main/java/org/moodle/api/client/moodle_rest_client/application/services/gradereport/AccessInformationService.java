@@ -1,6 +1,7 @@
 package org.moodle.api.client.moodle_rest_client.application.services.gradereport;
 
 import lombok.RequiredArgsConstructor;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 import org.moodle.api.client.moodle_rest_client.domain.ports.in.gradereport.user.GetAccessInformationUseCase;
 import org.moodle.api.client.moodle_rest_client.domain.ports.out.gradereport.AccessInformationPort;
 import org.moodle.api.client.moodle_rest_client.domain.responses.gradereport.user.AccessInformation;
@@ -13,7 +14,7 @@ public class AccessInformationService implements GetAccessInformationUseCase {
     private final AccessInformationPort accessInformationPort;
 
     @Override
-    public AccessInformation getAccessInformation(Long courseId) {
-        return accessInformationPort.getAccessInformation(courseId);
+    public AccessInformation getAccessInformation(MoodleCredentials moodleCredentials, Long courseId) {
+        return accessInformationPort.getAccessInformation(moodleCredentials, courseId);
     }
 }

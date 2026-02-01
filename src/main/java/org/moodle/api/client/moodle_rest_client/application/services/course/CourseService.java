@@ -3,6 +3,7 @@ package org.moodle.api.client.moodle_rest_client.application.services.course;
 import lombok.RequiredArgsConstructor;
 import org.moodle.api.client.moodle_rest_client.domain.models.Course;
 import org.moodle.api.client.moodle_rest_client.domain.models.CourseModule;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 import org.moodle.api.client.moodle_rest_client.domain.models.Section;
 import org.moodle.api.client.moodle_rest_client.domain.ports.in.course.course.*;
 import org.moodle.api.client.moodle_rest_client.domain.ports.out.course.CoursePort;
@@ -22,52 +23,52 @@ public class CourseService implements CreateCoursesUseCase, GetCoursesByFieldUse
     private final CoursePort coursePort;
 
     @Override
-    public List<Course> createCourses(List<CreateCourseRequest> coursesToCreate) {
-        return coursePort.createCourses(coursesToCreate);
+    public List<Course> createCourses(MoodleCredentials moodleCredentials, List<CreateCourseRequest> coursesToCreate) {
+        return coursePort.createCourses(moodleCredentials, coursesToCreate);
     }
 
     @Override
-    public List<Course> getCoursesByField(String field, String value) {
-        return coursePort.searchCoursesByField(field, value);
+    public List<Course> getCoursesByField(MoodleCredentials moodleCredentials, String field, String value) {
+        return coursePort.searchCoursesByField(moodleCredentials, field, value);
     }
 
     @Override
-    public void updateCourses(List<UpdateCourseRequest> coursesToUpdate) {
-        coursePort.updateCourses(coursesToUpdate);
+    public void updateCourses(MoodleCredentials moodleCredentials, List<UpdateCourseRequest> coursesToUpdate) {
+        coursePort.updateCourses(moodleCredentials, coursesToUpdate);
     }
 
     @Override
-    public void deleteCourses(List<Long> courseIds) {
-        coursePort.deleteCourses(courseIds);
+    public void deleteCourses(MoodleCredentials moodleCredentials, List<Long> courseIds) {
+        coursePort.deleteCourses(moodleCredentials, courseIds);
     }
 
     @Override
-    public List<Section> getCourseContents(Long courseId) {
-        return coursePort.getCourseContents(courseId);
+    public List<Section> getCourseContents(MoodleCredentials moodleCredentials, Long courseId) {
+        return coursePort.getCourseContents(moodleCredentials, courseId);
     }
 
     @Override
-    public CourseModule getCourseModule(Long courseModuleId) {
-        return coursePort.getCourseModule(courseModuleId);
+    public CourseModule getCourseModule(MoodleCredentials moodleCredentials, Long courseModuleId) {
+        return coursePort.getCourseModule(moodleCredentials, courseModuleId);
     }
 
     @Override
-    public CourseSearch searchCourses(String searchText, int page, int perPage) {
-        return coursePort.searchCourses(searchText, page, perPage);
+    public CourseSearch searchCourses(MoodleCredentials moodleCredentials, String searchText, int page, int perPage) {
+        return coursePort.searchCourses(moodleCredentials, searchText, page, perPage);
     }
 
     @Override
-    public List<Course> getCoursesById(List<Long> courseIds) {
-        return coursePort.getCoursesById(courseIds);
+    public List<Course> getCoursesById(MoodleCredentials moodleCredentials, List<Long> courseIds) {
+        return coursePort.getCoursesById(moodleCredentials, courseIds);
     }
 
     @Override
-    public Course duplicateCourse(DuplicateCourseRequest request) {
-        return coursePort.duplicateCourse(request);
+    public Course duplicateCourse(MoodleCredentials moodleCredentials, DuplicateCourseRequest request) {
+        return coursePort.duplicateCourse(moodleCredentials, request);
     }
 
     @Override
-    public void importCourse(ImportCourseRequest request) {
-        coursePort.importCourse(request);
+    public void importCourse(MoodleCredentials moodleCredentials, ImportCourseRequest request) {
+        coursePort.importCourse(moodleCredentials, request);
     }
 }

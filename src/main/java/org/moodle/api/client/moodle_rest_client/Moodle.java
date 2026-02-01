@@ -1,7 +1,7 @@
 package org.moodle.api.client.moodle_rest_client;
 
 import lombok.extern.slf4j.Slf4j;
-import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.config.MoodleApiConfig;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @Slf4j
@@ -12,33 +12,14 @@ public class Moodle {
     /**
      * Inicializa el contexto de Spring de la librería Moodle.
      * Debe ser llamado una vez al inicio de la aplicación cliente.
-     * @param url La URL base del servicio web de Moodle.
-     * @param token El token de acceso para la API de Moodle.
      */
-    public static void init(String url, String token) {
+    public static void init() {
         if (context == null) {
             log.info("Inicializando contexto de Spring...");
             context = new AnnotationConfigApplicationContext(MoodleRestClientApplication.class);
-            setCredentials(url, token);
             log.info("Contexto de Spring inicializado.");
         }
     }
-
-    /**
-     * Actualiza las credenciales de Moodle en tiempo de ejecución.
-     * @param url La nueva URL base del servicio web de Moodle.
-     * @param token El nuevo token de acceso para la API de Moodle.
-     */
-    public static void setCredentials(String url, String token) {
-        if (context == null) {
-            throw new IllegalStateException("El contexto de la librería Moodle no ha sido inicializado. Por favor, llama a Moodle.init() primero.");
-        }
-        MoodleApiConfig apiConfig = context.getBean(MoodleApiConfig.class);
-        apiConfig.setApiUrl(url);
-        apiConfig.setApiToken(token);
-        log.info("Credenciales actualizadas.");
-    }
-
 
     /**
      * Destruye el contexto de Spring de la librería Moodle.

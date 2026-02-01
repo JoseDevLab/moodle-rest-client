@@ -29,7 +29,7 @@ public class MoodleConfig {
     }
 
     @Bean
-    public MoodleHttpClient moodleHttpClient(RestTemplate restTemplate, MoodleApiConfig moodleApiConfig, ObjectMapper objectMapper) {
-        return new MoodleHttpClient(restTemplate, moodleApiConfig, objectMapper);
+    public MoodleHttpClient moodleHttpClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
+        return new MoodleHttpClient(restTemplate, objectMapper);
     }
 }

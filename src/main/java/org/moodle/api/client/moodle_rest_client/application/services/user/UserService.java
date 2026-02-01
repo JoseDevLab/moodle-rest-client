@@ -1,6 +1,7 @@
 package org.moodle.api.client.moodle_rest_client.application.services.user;
 
 import lombok.RequiredArgsConstructor;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 import org.moodle.api.client.moodle_rest_client.domain.models.Warning;
 import org.moodle.api.client.moodle_rest_client.domain.ports.in.user.CreateUsersUseCase;
 import org.moodle.api.client.moodle_rest_client.domain.ports.in.user.GetUsersUseCase;
@@ -23,17 +24,17 @@ public class UserService implements GetUsersUseCase, CreateUsersUseCase, UpdateU
     private final UserPort userPort;
 
     @Override
-    public UserSearchResponse getUsers(List<SearchUserCriterion> criteria) {
-        return userPort.getUsers(criteria);
+    public UserSearchResponse getUsers(MoodleCredentials moodleCredentials, List<SearchUserCriterion> criteria) {
+        return userPort.getUsers(moodleCredentials, criteria);
     }
 
     @Override
-    public List<CreateUserResponse> createUsers(List<CreateUserRequest> usersToCreate) {
-        return userPort.createUsers(usersToCreate);
+    public List<CreateUserResponse> createUsers(MoodleCredentials moodleCredentials, List<CreateUserRequest> usersToCreate) {
+        return userPort.createUsers(moodleCredentials, usersToCreate);
     }
 
     @Override
-    public List<Warning> updateUsers(List<UpdateUserRequest> usersToUpdate) {
-        return userPort.updateUsers(usersToUpdate);
+    public List<Warning> updateUsers(MoodleCredentials moodleCredentials, List<UpdateUserRequest> usersToUpdate) {
+        return userPort.updateUsers(moodleCredentials, usersToUpdate);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.moodle.api.client.moodle_rest_client.domain.exceptions.MoodleApiException;
 import org.moodle.api.client.moodle_rest_client.domain.models.Category;
+import org.moodle.api.client.moodle_rest_client.domain.models.MoodleCredentials;
 import org.moodle.api.client.moodle_rest_client.domain.ports.in.course.category.*;
 import org.moodle.api.client.moodle_rest_client.domain.ports.out.course.CategoryPort;
 import org.moodle.api.client.moodle_rest_client.domain.requests.course.category.*;
@@ -29,38 +30,38 @@ public class CategoryService implements GetCourseCategoriesUseCase, CreateCatego
     private final CategoryPort categoryPort;
 
     @Override
-    public List<Category> getCourseCategories() {
-        return categoryPort.getCourseCategories();
+    public List<Category> getCourseCategories(MoodleCredentials moodleCredentials) {
+        return categoryPort.getCourseCategories(moodleCredentials);
     }
 
     @Override
-    public List<Category> createCategories(List<CreateCategoryRequest> categoriesToCreate) {
-        return categoryPort.createCategories(categoriesToCreate);
+    public List<Category> createCategories(MoodleCredentials moodleCredentials, List<CreateCategoryRequest> categoriesToCreate) {
+        return categoryPort.createCategories(moodleCredentials, categoriesToCreate);
     }
 
     @Override
-    public void updateCategories(List<UpdateCategoryRequest> categoriesToUpdate) {
-        categoryPort.updateCategories(categoriesToUpdate);
+    public void updateCategories(MoodleCredentials moodleCredentials, List<UpdateCategoryRequest> categoriesToUpdate) {
+        categoryPort.updateCategories(moodleCredentials, categoriesToUpdate);
     }
 
     @Override
-    public void deleteCategories(List<DeleteCategoryRequest> categoriesToDelete) {
-        categoryPort.deleteCategories(categoriesToDelete);
+    public void deleteCategories(MoodleCredentials moodleCredentials, List<DeleteCategoryRequest> categoriesToDelete) {
+        categoryPort.deleteCategories(moodleCredentials, categoriesToDelete);
     }
 
     @Override
-    public List<Category> searchCategories(SearchCategoryRequest request) {
-        return categoryPort.searchCategories(request);
+    public List<Category> searchCategories(MoodleCredentials moodleCredentials, SearchCategoryRequest request) {
+        return categoryPort.searchCategories(moodleCredentials, request);
     }
 
     @Override
-    public BulkCategoryCreation createCategoryTree(List<RecursiveCategoryRequest> categoryTree) {
+    public BulkCategoryCreation createCategoryTree(MoodleCredentials moodleCredentials, List<RecursiveCategoryRequest> categoryTree) {
         BulkCategoryCreation response = new BulkCategoryCreation(new ArrayList<>(), new ArrayList<>());
-        processLevel(categoryTree, 0L, response);
+        processLevel(moodleCredentials, categoryTree, 0L, response);
         return response;
     }
 
-    private void processLevel(List<RecursiveCategoryRequest> requests, Long parentId, BulkCategoryCreation response) {
+    private void processLevel(MoodleCredentials moodleCredentials, List<RecursiveCategoryRequest> requests, Long parentId, BulkCategoryCreation response) {
         if (requests == null || requests.isEmpty()) {
             return;
         }
@@ -77,7 +78,7 @@ public class CategoryService implements GetCourseCategoriesUseCase, CreateCatego
                         .criteria(criteria)
                         .build();
                 log.info("Criterios de busqueda: {}", searchCategoryRequest);
-                List<Category> existingCategories = this.searchCategories(searchCategoryRequest);
+                List<Category> existingCategories = this.searchCategories(moodleCredentials, searchCategoryRequest);
                 log.info("Categorias encontradas: {}", existingCategories);
                 Category processedCategory;
                 if (!existingCategories.isEmpty()) {
@@ -97,8 +98,8 @@ public class CategoryService implements GetCourseCategoriesUseCase, CreateCatego
                             .theme(request.getTheme())
                             .build();
                     log.info("Creando categoría: {}", createRequest);
-                    this.createCategories(Collections.singletonList(createRequest));
-                    List<Category> created = this.searchCategories(searchCategoryRequest);
+                    this.createCategories(moodleCredentials, Collections.singletonList(createRequest));
+                    List<Category> created = this.searchCategories(moodleCredentials, searchCategoryRequest);
                     processedCategory = created.get(0);
                 }
 
@@ -113,14 +114,14 @@ public class CategoryService implements GetCourseCategoriesUseCase, CreateCatego
 
             // 3. Si la operación fue exitosa y hay hijos, procesar el siguiente nivel
             if (newParentId != null) {
-                processLevel(request.getChildren(), newParentId, response);
+                processLevel(moodleCredentials, request.getChildren(), newParentId, response);
             }
         }
     }
 
     @Override
-    public List<RecursiveCategory> getRecursiveCategories(SearchCategoryRequest request) throws MoodleApiException {
-        List<Category> categories = categoryPort.searchCategories(request);
+    public List<RecursiveCategory> getRecursiveCategories(MoodleCredentials moodleCredentials, SearchCategoryRequest request) throws MoodleApiException {
+        List<Category> categories = categoryPort.searchCategories(moodleCredentials, request);
 
         // Crear un mapa para acceso rápido por ID
         Map<Long, RecursiveCategory> categoryMap = categories.stream()
