@@ -1,5 +1,6 @@
 package org.moodle.api.client.moodle_rest_client.infrastructure.outputs.client;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -60,9 +61,10 @@ public class MoodleHttpClient {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(requestBody, headers);
 
+        JsonNode responseNode = null;
         try {
             // 1. We get the response as a generic JsonNode to be able to inspect it
-            JsonNode responseNode = restTemplate.postForObject(url, request, JsonNode.class);
+            responseNode = restTemplate.postForObject(url, request, JsonNode.class);
 
             // 2. We check if the response is actually a Moodle error
             checkForMoodleError(responseNode);
@@ -76,6 +78,12 @@ public class MoodleHttpClient {
         } catch (RestClientException e) {
             log.error("REST Client Error: {}", e.getMessage());
             throw new MoodleApiException("Communication error with Moodle server: " + e.getMessage(), e);
+        } catch (JsonMappingException e) {
+            log.error("FATAL PARSING ERROR: The Moodle response does not match the DTO structure.");
+            if (responseNode != null) {
+                log.error("Raw JSON response from Moodle: {}", responseNode.toPrettyString());
+            }
+            throw new MoodleApiException("Error mapping Moodle response to DTO: " + e.getMessage(), e);
         } catch (IOException e) {
             log.error("IO Error processing response: {}", e.getMessage());
             throw new MoodleApiException("Error processing response from Moodle server: " + e.getMessage(), e);

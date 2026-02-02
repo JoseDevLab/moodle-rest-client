@@ -1,7 +1,10 @@
 package org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.course.course;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.deserializers.BooleanOrAnythingDeserializer;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.deserializers.IntegerOrAnythingDeserializer;
 
 import java.util.List;
 
@@ -21,6 +24,7 @@ public class CourseContentModuleDTO {
     private String modicon;
     private String modname;
     private String purpose;
+    @JsonDeserialize(using = BooleanOrAnythingDeserializer.class)
     private Boolean branded;
     private String modplural;
     private String availability;
