@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class CourseDate {
     private String label;
-    private Integer timestamp;
-    private Integer relativeto;
+    private Long timestamp;
+    private Long relativeto;
     private String dataid;
 }
