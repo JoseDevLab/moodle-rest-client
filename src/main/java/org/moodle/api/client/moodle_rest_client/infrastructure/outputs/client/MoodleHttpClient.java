@@ -1,5 +1,6 @@
 package org.moodle.api.client.moodle_rest_client.infrastructure.outputs.client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,24 +104,33 @@ public class MoodleHttpClient {
         if (value == null) return;
 
         if (value instanceof List) {
+            // Manejo de Listas
             List<?> list = (List<?>) value;
             for (int i = 0; i < list.size(); i++) {
                 flattenValue(list.get(i), target, key + "[" + i + "]");
             }
-        } else if (value.getClass().isPrimitive() || value instanceof String || value instanceof Number || value instanceof Boolean) {
+        } else if (value instanceof Map) {
+            // NUEVO: Manejo explícito de Mapas para evitar que caigan en la reflexión
+            Map<?, ?> map = (Map<?, ?>) value;
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                flattenValue(entry.getValue(), target, key + "[" + entry.getKey() + "]");
+            }
+        } else if (value.getClass().isPrimitive() || value instanceof String ||
+                value instanceof Number || value instanceof Boolean ||
+                value instanceof Enum || value instanceof Character) {
+            // Casos base
             target.add(key, value.toString());
         } else {
-            Field[] fields = value.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                try {
-                    field.setAccessible(true);
-                    Object fieldValue = field.get(value);
-                    if (fieldValue != null) {
-                        flattenValue(fieldValue, target, key + "[" + field.getName() + "]");
-                    }
-                } catch (IllegalAccessException e) {
-                    // Ignore
+            try {
+                // Jackson convierte el DTO (ej. ImportCourseRequestDTO) a un Map seguro
+                Map<String, Object> map = objectMapper.convertValue(value, new TypeReference<Map<String, Object>>() {});
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    flattenValue(entry.getValue(), target, key + "[" + entry.getKey() + "]");
                 }
+            } catch (IllegalArgumentException e) {
+                log.warn("No se pudo aplanar el objeto de tipo {}: {}", value.getClass(), e.getMessage());
+                // Fallback de seguridad en caso de ser un objeto no serializable
+                target.add(key, value.toString());
             }
         }
     }

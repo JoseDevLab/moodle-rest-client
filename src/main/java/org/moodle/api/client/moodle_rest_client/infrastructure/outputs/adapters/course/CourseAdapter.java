@@ -39,6 +39,8 @@ public class CourseAdapter implements CoursePort {
     private static final String GET_COURSES_FUNCTION = "core_course_get_courses";
     private static final String DUPLICATE_COURSE_FUNCTION = "core_course_duplicate_course";
     private static final String IMPORT_COURSE_FUNCTION = "core_course_import_course";
+    private static final String CORE_BACKUP_SUBMIT_COPY_FORM = "core_backup_submit_copy_form";
+    private static final String CORE_BACKUP_GET_COPY_PROGRESS = "core_backup_get_copy_progress";
 
     @Override
     public List<Course> createCourses(MoodleCredentials moodleCredentials, List<CreateCourseRequest> coursesToCreate) {
