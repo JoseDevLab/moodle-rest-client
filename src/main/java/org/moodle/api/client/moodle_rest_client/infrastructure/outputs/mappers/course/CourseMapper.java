@@ -7,10 +7,11 @@ import org.moodle.api.client.moodle_rest_client.domain.requests.course.course.*;
 import org.moodle.api.client.moodle_rest_client.domain.responses.course.category.CourseSearch;
 import org.moodle.api.client.moodle_rest_client.domain.responses.course.course.*;
 import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.dtos.course.course.*;
+import org.moodle.api.client.moodle_rest_client.infrastructure.outputs.mappers.NameValueMapper;
 
 import java.util.List;
 
-@Mapper
+@Mapper(uses = NameValueMapper.class)
 public interface CourseMapper {
     default int map(boolean value){
         return value ? 1 : 0;
