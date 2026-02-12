@@ -26,7 +26,7 @@ public class UpdateCourseRequestDTO {
     private Integer numsections;
     private Long maxbytes;
     private Boolean showreports;
-    private Boolean visible;
+    private Integer visible;
     private Integer groupmode;
     private Integer groupmodeforce;
     private Long defaultgroupingid;
