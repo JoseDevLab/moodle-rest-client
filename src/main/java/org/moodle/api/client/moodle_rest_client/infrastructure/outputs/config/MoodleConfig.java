@@ -18,7 +18,7 @@ public class MoodleConfig {
 
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(5000); // 5 segundos
-        factory.setReadTimeout(3 * 60000);   // 3 minutos
+        factory.setReadTimeout(3 * 60000); // 3 minutos
 
         RestTemplate restTemplate = new RestTemplate(factory);
         // Añadir ambos convertidores: JSON para leer respuestas, Form para enviar peticiones
